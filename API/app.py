@@ -1,0 +1,6 @@
+from fastapi import FastAPI
+
+from API.Controllers.CustomerController import router as customer_router
+
+app = FastAPI()
+app.include_router(customer_router)
