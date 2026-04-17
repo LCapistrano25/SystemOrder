@@ -19,6 +19,7 @@ class SqliteFreightRepository(IFreight):
                     city,
                     state,
                     zip_code,
+                    country,
                     total_weight,
                     price,
                     express_delivery
@@ -36,6 +37,7 @@ class SqliteFreightRepository(IFreight):
             city=row["city"],
             state=row["state"],
             zip_code=row["zip_code"],
+            country=row["country"],
         )
         return Freight(
             id=row["id"],
@@ -62,10 +64,11 @@ class SqliteFreightRepository(IFreight):
                     city,
                     state,
                     zip_code,
+                    country,
                     total_weight,
                     price,
                     express_delivery
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     freight.id,
@@ -73,6 +76,7 @@ class SqliteFreightRepository(IFreight):
                     freight.address.city,
                     freight.address.state,
                     freight.address.zip_code,
+                    freight.address.country,
                     freight.total_weight,
                     freight.price,
                     1 if freight.express_delivery else 0,
@@ -89,6 +93,7 @@ class SqliteFreightRepository(IFreight):
                     city = ?,
                     state = ?,
                     zip_code = ?,
+                    country = ?,
                     total_weight = ?,
                     price = ?,
                     express_delivery = ?
@@ -99,6 +104,7 @@ class SqliteFreightRepository(IFreight):
                     freight.address.city,
                     freight.address.state,
                     freight.address.zip_code,
+                    freight.address.country,
                     freight.total_weight,
                     freight.price,
                     1 if freight.express_delivery else 0,

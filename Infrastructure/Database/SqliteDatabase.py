@@ -87,12 +87,21 @@ class SqliteDatabase(IDatabase):
                     city TEXT NOT NULL,
                     state TEXT NOT NULL,
                     zip_code TEXT NOT NULL,
+                    country TEXT NOT NULL DEFAULT 'BR',
                     total_weight REAL NOT NULL,
                     price REAL NOT NULL,
                     express_delivery INTEGER NOT NULL
                 )
                 """
             )
+            columns = {
+                row["name"]
+                for row in connection.execute("PRAGMA table_info(freights)").fetchall()
+            }
+            if "country" not in columns:
+                connection.execute(
+                    "ALTER TABLE freights ADD COLUMN country TEXT NOT NULL DEFAULT 'BR'"
+                )
 
             connection.execute(
                 """

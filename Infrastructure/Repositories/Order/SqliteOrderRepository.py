@@ -51,6 +51,7 @@ class SqliteOrderRepository(IOrder):
                     city,
                     state,
                     zip_code,
+                    country,
                     total_weight,
                     price,
                     express_delivery
@@ -99,6 +100,7 @@ class SqliteOrderRepository(IOrder):
             city=freight_row["city"],
             state=freight_row["state"],
             zip_code=freight_row["zip_code"],
+            country=freight_row["country"],
         )
         freight = Freight(
             id=freight_row["id"],
