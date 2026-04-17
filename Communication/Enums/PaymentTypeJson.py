@@ -1,6 +1,5 @@
 from enum import IntEnum
 
-
 class PaymentTypeJson(IntEnum):
     CARD = 1
     CASH = 2
