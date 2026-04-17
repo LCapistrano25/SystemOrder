@@ -11,6 +11,7 @@ from Domain.Services.OrderPricing.payment.payment_rules_applier import PaymentRu
 
 
 class OrderPricingService:
+    """Orquestra o cálculo financeiro de um pedido (subtotal, descontos, frete, juros e total)."""
     def __init__(
         self,
         *,
@@ -20,6 +21,15 @@ class OrderPricingService:
         freight_calculator: FreightCalculator,
         payment_rules_applier: PaymentRulesApplier,
     ):
+        """Inicializa o serviço com suas dependências.
+
+        Args:
+            subtotal_calculator: Calculadora de subtotal do pedido.
+            customer_discount_calculator: Calculadora de desconto por tipo de cliente.
+            coupon_applier: Aplicador de cupons.
+            freight_calculator: Calculadora de frete.
+            payment_rules_applier: Aplicador de regras de pagamento (juros/ajustes).
+        """
         self._subtotal_calculator = subtotal_calculator
         self._customer_discount_calculator = customer_discount_calculator
         self._coupon_applier = coupon_applier
@@ -27,6 +37,14 @@ class OrderPricingService:
         self._payment_rules_applier = payment_rules_applier
 
     def calculate(self, order: Order) -> OrderPricingResult:
+        """Calcula pricing completo do pedido.
+
+        Args:
+            order: Pedido a ser precificado.
+
+        Returns:
+            Resultado consolidado do pricing com mensagens geradas no processo.
+        """
         subtotal = self._subtotal_calculator.calculate(order)
         customer_type = order.customer.customer_type
         discount = self._customer_discount_calculator.calculate(subtotal, customer_type)
@@ -76,6 +94,7 @@ class OrderPricingService:
         customer_type: CustomerType,
         messages: list[str],
     ) -> tuple[float, float]:
+        """Aplica cupom (se houver) ajustando desconto/frete e adicionando mensagens."""
         if order.coupon is None:
             return current_discount, current_freight
 

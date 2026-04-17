@@ -13,6 +13,7 @@ from Domain.Services.OrderPricing.coupons.coupon_strategies import (
 
 @dataclass(frozen=True)
 class DefaultCouponConfig:
+    """Configuração padrão para cupons suportados no sistema."""
     desc10_code: str = "DESC10"
     desc10_rate: float = 0.10
     desc20_code: str = "DESC20"
@@ -24,6 +25,14 @@ class DefaultCouponConfig:
 
 
 def build_default_coupon_applier(config: DefaultCouponConfig | None = None) -> CouponApplier:
+    """Constrói um CouponApplier com o conjunto padrão de strategies.
+
+    Args:
+        config: Configuração opcional dos códigos/valores.
+
+    Returns:
+        Aplicador de cupons pronto para uso no pricing.
+    """
     config = config or DefaultCouponConfig()
     return CouponApplier(
         strategies=[
@@ -33,4 +42,3 @@ def build_default_coupon_applier(config: DefaultCouponConfig | None = None) -> C
             VipFixedDiscountCoupon(config.vip50_code, config.vip50_required_type, config.vip50_amount),
         ]
     )
-

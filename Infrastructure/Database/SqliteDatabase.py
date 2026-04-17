@@ -4,11 +4,18 @@ from contextlib import contextmanager
 from Infrastructure.Database.IDatabase import IDatabase
 
 class SqliteDatabase(IDatabase):
+    """Implementação de banco de dados SQLite com controle transacional simples."""
     def __init__(self, db_path: str):
+        """Inicializa o acesso ao banco SQLite.
+
+        Args:
+            db_path: Caminho do arquivo .sqlite/.db.
+        """
         self._db_path = db_path
 
     @contextmanager
     def connect(self):
+        """Abre uma conexão SQLite e garante commit/rollback ao sair do contexto."""
         connection = sqlite3.connect(self._db_path)
         try:
             connection.row_factory = sqlite3.Row
@@ -22,6 +29,7 @@ class SqliteDatabase(IDatabase):
             connection.close()
 
     def ensure_schema(self) -> None:
+        """Cria tabelas/índices necessários, caso ainda não existam."""
         with self.connect() as connection:
             connection.execute(
                 """

@@ -7,6 +7,7 @@ from Domain.Enums.PaymentType import PaymentType
 
 @dataclass(frozen=True)
 class PaymentConfig:
+    """Configuração das regras de pagamento (juros/benefícios por forma)."""
     card_interest_up_to_limit: float = 0.02
     card_interest_over_limit: float = 0.05
     card_installments_limit: int = 6
@@ -15,7 +16,13 @@ class PaymentConfig:
 
 
 class PaymentRulesApplier:
+    """Aplica regras de pagamento para calcular juros e ajustar desconto."""
     def __init__(self, config: PaymentConfig):
+        """Inicializa o aplicador de regras.
+
+        Args:
+            config: Configuração das regras de juros/descontos.
+        """
         self._config = config
 
     def apply(
@@ -26,6 +33,17 @@ class PaymentRulesApplier:
         payment_type: PaymentType,
         installments: int,
     ) -> tuple[float, float]:
+        """Aplica regras conforme a forma de pagamento.
+
+        Args:
+            subtotal: Subtotal do pedido.
+            current_discount: Desconto acumulado até o momento.
+            payment_type: Forma de pagamento selecionada.
+            installments: Número de parcelas (quando aplicável).
+
+        Returns:
+            Tupla (juros_calculados, desconto_atualizado).
+        """
         interest = 0.0
         discount = current_discount
 

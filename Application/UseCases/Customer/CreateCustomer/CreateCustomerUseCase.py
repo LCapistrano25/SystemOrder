@@ -9,11 +9,26 @@ from Domain.Repositories.Customer.ICustomer import ICustomer
 
 
 class CreateCustomerUseCase(ICreateCustomer):
+    """Caso de uso responsável por criar um cliente e persistir no repositório."""
     def __init__(self, customer_repository: ICustomer, validator: CreateCustomerValidator | None = None):
+        """Inicializa o caso de uso.
+
+        Args:
+            customer_repository: Repositório de clientes utilizado para persistência.
+            validator: Validador do input. Se não informado, usa o validador padrão.
+        """
         self._customer_repository = customer_repository
         self._validator = validator or CreateCustomerValidator()
 
     def execute(self, customer: CustomerInput) -> CustomerOutput:
+        """Cria um cliente a partir do input, aplica regras e salva no repositório.
+
+        Args:
+            customer: Dados de entrada para criação do cliente.
+
+        Returns:
+            DTO de saída com os dados do cliente criado.
+        """
         self._validator.validate(customer)  
 
         entity = Customer(

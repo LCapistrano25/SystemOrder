@@ -9,18 +9,37 @@ from Domain.Services.OrderPricingService import OrderPricingService
 
 
 class ProcessOrderUseCase(IProcessOrder):
+    """Caso de uso responsável por processar um pedido e gerar a saída de execução."""
     def __init__(
         self,
         order_repository: IOrder,
         pricing_service: OrderPricingService | None = None,
         alert_service: OrderAlertService | None = None,
     ):
+        """Inicializa o caso de uso.
+
+        Args:
+            order_repository: Repositório de pedidos utilizado para obter o pedido.
+            pricing_service: Serviço de pricing (subtotal, descontos, frete, juros e total).
+            alert_service: Serviço de alertas/recomendações.
+        """
         self._order_repository = order_repository
         self._pricing_service = pricing_service or OrderPricingService()
         self._alert_service = alert_service or OrderAlertService()
         self._logs: list[str] = []
 
     def execute(self, input_data: ProcessOrderInput) -> ProcessOrderOutput:
+        """Processa um pedido: calcula pricing, gera alertas/mensagens e compõe o output.
+
+        Args:
+            input_data: Parâmetros de execução do processamento do pedido.
+
+        Returns:
+            Resultado com totais calculados, mensagens, logs e texto final consolidado.
+
+        Raises:
+            ValueError: Quando o identificador do pedido for inválido.
+        """
         if input_data.order_id <= 0:
             raise ValueError("Pedido inválido")
 
@@ -72,4 +91,5 @@ class ProcessOrderUseCase(IProcessOrder):
         )
 
     def get_logs(self) -> list[str]:
+        """Obtém os logs acumulados gerados por execuções anteriores."""
         return list(self._logs)

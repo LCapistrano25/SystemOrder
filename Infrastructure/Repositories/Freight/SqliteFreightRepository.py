@@ -5,11 +5,22 @@ from Infrastructure.Database.IDatabase import IDatabase
 
 
 class SqliteFreightRepository(IFreight):
+    """Repositório SQLite para persistência e consulta de fretes."""
     def __init__(self, database: IDatabase):
+        """Inicializa o repositório e garante o schema.
+
+        Args:
+            database: Abstração de banco de dados usada para conexão/transações.
+        """
         self._database = database
         self._database.ensure_schema()
 
     def get_freight(self, freight_id: int) -> Freight:
+        """Obtém um frete pelo id.
+
+        Raises:
+            ValueError: Quando o frete não existir.
+        """
         with self._database.connect() as connection:
             row = connection.execute(
                 """
@@ -48,6 +59,11 @@ class SqliteFreightRepository(IFreight):
         )
 
     def add_freight(self, freight: Freight) -> None:
+        """Adiciona um novo frete.
+
+        Raises:
+            ValueError: Quando já existir frete com o mesmo id.
+        """
         with self._database.connect() as connection:
             existing = connection.execute(
                 "SELECT 1 FROM freights WHERE id = ?",
@@ -84,6 +100,11 @@ class SqliteFreightRepository(IFreight):
             )
 
     def update_freight(self, freight: Freight) -> None:
+        """Atualiza um frete existente.
+
+        Raises:
+            ValueError: Quando o frete não existir.
+        """
         with self._database.connect() as connection:
             result = connection.execute(
                 """
@@ -116,6 +137,11 @@ class SqliteFreightRepository(IFreight):
             raise ValueError(f"Freight not found: {freight.id}")
 
     def delete_freight(self, freight_id: int) -> None:
+        """Remove um frete pelo id.
+
+        Raises:
+            ValueError: Quando o frete não existir.
+        """
         with self._database.connect() as connection:
             result = connection.execute(
                 "DELETE FROM freights WHERE id = ?",

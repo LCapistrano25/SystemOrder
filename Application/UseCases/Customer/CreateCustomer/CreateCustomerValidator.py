@@ -3,7 +3,16 @@ from Domain.Enums.CustomerType import CustomerType
 
 
 class CreateCustomerValidator:
+    """Validador do input do caso de uso de criação de cliente."""
     def validate(self, customer: CustomerInput) -> None:
+        """Valida dados de criação de cliente.
+
+        Args:
+            customer: DTO de entrada com os dados do cliente.
+
+        Raises:
+            ValueError: Quando algum campo obrigatório estiver ausente/inválido.
+        """
         if not isinstance(customer.name, str) or not customer.name.strip():
             raise ValueError("Customer name is required")
 

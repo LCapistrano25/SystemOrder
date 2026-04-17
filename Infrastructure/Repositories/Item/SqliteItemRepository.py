@@ -4,11 +4,22 @@ from Domain.Repositories.Item.IItem import IItem
 from Infrastructure.Database.IDatabase import IDatabase
 
 class SqliteItemRepository(IItem):
+    """Repositório SQLite para persistência e consulta de itens."""
     def __init__(self, database: IDatabase):
+        """Inicializa o repositório e garante o schema.
+
+        Args:
+            database: Abstração de banco de dados usada para conexão/transações.
+        """
         self._database = database
         self._database.ensure_schema()
 
     def get_item(self, item_id: int) -> Item:
+        """Obtém um item pelo id.
+
+        Raises:
+            ValueError: Quando o item não existir.
+        """
         with self._database.connect() as connection:
             row = connection.execute(
                 "SELECT id, name, price, quantity, category FROM items WHERE id = ?",
@@ -27,6 +38,11 @@ class SqliteItemRepository(IItem):
         )
 
     def add_item(self, item: Item) -> None:
+        """Adiciona um novo item.
+
+        Raises:
+            ValueError: Quando já existir item com o mesmo id.
+        """
         with self._database.connect() as connection:
             existing = connection.execute(
                 "SELECT 1 FROM items WHERE id = ?",
@@ -41,6 +57,11 @@ class SqliteItemRepository(IItem):
             )
 
     def update_item(self, item: Item) -> None:
+        """Atualiza um item existente.
+
+        Raises:
+            ValueError: Quando o item não existir.
+        """
         with self._database.connect() as connection:
             result = connection.execute(
                 "UPDATE items SET name = ?, price = ?, quantity = ?, category = ? WHERE id = ?",
@@ -51,6 +72,11 @@ class SqliteItemRepository(IItem):
             raise ValueError(f"Item not found: {item.id}")
 
     def delete_item(self, item_id: int) -> None:
+        """Remove um item pelo id.
+
+        Raises:
+            ValueError: Quando o item não existir.
+        """
         with self._database.connect() as connection:
             result = connection.execute(
                 "DELETE FROM items WHERE id = ?",

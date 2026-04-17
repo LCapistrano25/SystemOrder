@@ -11,6 +11,14 @@ class Customer(EntityBase):
         customer_type: CustomerType,
         id: int | None = None,
     ):
+        """Inicializa um cliente e valida seus invariantes.
+
+        Args:
+            name: Nome do cliente.
+            email: E-mail em formato texto (será convertido para Value Object).
+            customer_type: Tipo do cliente.
+            id: Identificador do cliente (opcional, normalmente definido pela persistência).
+        """
         super().__init__(id)
         self.name = name
         self.email = Email.create(email)
@@ -38,4 +46,5 @@ class Customer(EntityBase):
         self.blocked = False
 
     def __str__(self):
+        """Representação textual do cliente, útil para logs e depuração."""
         return f"Customer(Name: {self.name}, Email: {self.email}, Type: {self.customer_type.name}, Blocked: {self.blocked})"

@@ -7,6 +7,7 @@ from Domain.Entities.base.EntityBase import EntityBase
 from Domain.ValuesObjects.Address import Address
 
 class Order(EntityBase):
+    """Entidade de Pedido, agregando cliente, itens, pagamento, frete e cupom."""
     def __init__(
         self,
         id: int,
@@ -16,6 +17,16 @@ class Order(EntityBase):
         freight: Freight,
         coupon: Coupon = None,
     ):
+        """Inicializa um pedido e valida seus invariantes.
+
+        Args:
+            id: Identificador do pedido.
+            customer: Cliente associado ao pedido.
+            items: Lista de itens do pedido.
+            payment: Pagamento do pedido.
+            freight: Frete do pedido.
+            coupon: Cupom opcional aplicado ao pedido.
+        """
         super().__init__(id)
         self.customer = customer
         self.items = items
@@ -25,6 +36,7 @@ class Order(EntityBase):
         self._validate()
 
     def _validate(self):
+        """Regras de validação do pedido."""
         if not isinstance(self.id, int) or self.id <= 0:
             raise ValueError("Order ID must be a positive integer")
         
@@ -53,6 +65,7 @@ class Order(EntityBase):
             raise ValueError("Invalid coupon")
 
     def __str__(self):
+        """Representação textual do pedido, útil para logs e depuração."""
         coupon_code = self.coupon.code if self.coupon is not None else None
         return (
             f"Order(ID: {self.id}, "

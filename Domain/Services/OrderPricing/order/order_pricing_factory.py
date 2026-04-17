@@ -10,6 +10,7 @@ from Domain.Services.OrderPricing.payment.payment_rules_applier import PaymentCo
 
 
 def build_order_pricing_service() -> OrderPricingService:
+    """Constrói o serviço padrão de precificação com configurações default."""
     return OrderPricingService(
         subtotal_calculator=OrderSubtotalCalculator(),
         customer_discount_calculator=CustomerDiscountCalculator(),
@@ -19,8 +20,10 @@ def build_order_pricing_service() -> OrderPricingService:
     )
 
 def _build_freight_calculator() -> FreightCalculator:
+    """Monta a calculadora de frete com configuração padrão."""
     return FreightCalculator(FreightConfig())
 
 def _build_payment_rules_applier() -> PaymentRulesApplier:
+    """Monta o aplicador de regras de pagamento com configuração padrão."""
     return PaymentRulesApplier(PaymentConfig())
 

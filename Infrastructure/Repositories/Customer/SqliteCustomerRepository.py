@@ -7,11 +7,22 @@ from Infrastructure.Database.IDatabase import IDatabase
 
 
 class SqliteCustomerRepository(ICustomer):
+    """Repositório SQLite para persistência e consulta de clientes."""
     def __init__(self, database: IDatabase):
+        """Inicializa o repositório e garante o schema.
+
+        Args:
+            database: Abstração de banco de dados usada para conexão/transações.
+        """
         self._database = database
         self._database.ensure_schema()
 
     def get_customer(self, customer_id: int) -> Customer:
+        """Obtém um cliente por id.
+
+        Raises:
+            ValueError: Quando o cliente não existir.
+        """
         with self._database.connect() as connection:
             row = connection.execute(
                 "SELECT id, name, email, customer_type, blocked FROM customers WHERE id = ?",
@@ -32,6 +43,7 @@ class SqliteCustomerRepository(ICustomer):
         return customer
 
     def list_customers(self) -> list[Customer]:
+        """Lista clientes ordenados por id."""
         with self._database.connect() as connection:
             rows = connection.execute(
                 "SELECT id, name, email, customer_type, blocked FROM customers ORDER BY id",
@@ -51,6 +63,11 @@ class SqliteCustomerRepository(ICustomer):
         return customers
 
     def add_customer(self, customer: Customer) -> None:
+        """Adiciona um cliente, atribuindo id quando necessário.
+
+        Raises:
+            ValueError: Quando existir conflito de e-mail ou id.
+        """
         with self._database.connect() as connection:
             existing_email = connection.execute(
                 "SELECT 1 FROM customers WHERE email = ?",
@@ -101,6 +118,11 @@ class SqliteCustomerRepository(ICustomer):
                 raise
 
     def update_customer(self, customer: Customer) -> None:
+        """Atualiza um cliente existente.
+
+        Raises:
+            ValueError: Quando o cliente não existir ou houver conflito de e-mail.
+        """
         with self._database.connect() as connection:
             existing_email = connection.execute(
                 "SELECT 1 FROM customers WHERE email = ? AND id != ?",
@@ -129,6 +151,11 @@ class SqliteCustomerRepository(ICustomer):
             raise ValueError(f"Customer not found: {customer.id}")
 
     def delete_customer(self, customer_id: int) -> None:
+        """Remove um cliente por id.
+
+        Raises:
+            ValueError: Quando o cliente não existir.
+        """
         with self._database.connect() as connection:
             result = connection.execute(
                 "DELETE FROM customers WHERE id = ?",

@@ -3,6 +3,7 @@ from Domain.Enums.PaymentType import PaymentType
 
 
 class OrderAlertService:
+    """Serviço de domínio para geração de alertas e recomendações de pedido."""
     def get_alerts(
         self,
         *,
@@ -11,6 +12,17 @@ class OrderAlertService:
         payment_type: PaymentType,
         country: str,
     ) -> list[str]:
+        """Gera alertas/recomendações com base em regras de negócio do pedido.
+
+        Args:
+            subtotal: Subtotal do pedido.
+            customer_type: Tipo do cliente.
+            payment_type: Forma de pagamento.
+            country: País do endereço de entrega.
+
+        Returns:
+            Lista de mensagens de alerta/recomendação.
+        """
         messages: list[str] = []
 
         if subtotal > 1000:
@@ -26,4 +38,3 @@ class OrderAlertService:
             messages.append("Pedido internacional abaixo do valor mínimo recomendado")
 
         return messages
-

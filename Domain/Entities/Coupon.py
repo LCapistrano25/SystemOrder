@@ -3,6 +3,13 @@ from Domain.Entities.base.EntityBase import EntityBase
 class Coupon(EntityBase):
     """Entidade de Cupom"""
     def __init__(self, id: int, code: str, discount: float):
+        """Inicializa um cupom e valida seus invariantes.
+
+        Args:
+            id: Identificador do cupom.
+            code: Código do cupom (apenas letras maiúsculas e números).
+            discount: Percentual de desconto (não negativo).
+        """
         super().__init__(id)
         self.code = code.strip() if code else code
         self.discount = discount
@@ -17,4 +24,5 @@ class Coupon(EntityBase):
             raise ValueError("Discount cannot be negative")
 
     def __str__(self):
+        """Representação textual do cupom, útil para logs e depuração."""
         return f"Coupon(ID: {self.id}, Code: {self.code}, Discount: {self.discount}%)"

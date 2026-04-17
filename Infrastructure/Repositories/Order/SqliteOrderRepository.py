@@ -13,11 +13,22 @@ from Domain.ValuesObjects.Address import Address
 
 
 class SqliteOrderRepository(IOrder):
+    """Repositório SQLite para persistência e consulta de pedidos."""
     def __init__(self, database: IDatabase):
+        """Inicializa o repositório e garante o schema.
+
+        Args:
+            database: Abstração de banco de dados usada para conexão/transações.
+        """
         self._database = database
         self._database.ensure_schema()
 
     def get_order(self, order_id: int) -> Order:
+        """Obtém um pedido agregado (cliente, itens, pagamento, frete e cupom).
+
+        Raises:
+            ValueError: Quando o pedido não existir ou dados estiverem incompletos.
+        """
         with self._database.connect() as connection:
             order_row = connection.execute(
                 """
@@ -139,6 +150,11 @@ class SqliteOrderRepository(IOrder):
         )
 
     def add_order(self, order: Order) -> None:
+        """Adiciona um novo pedido e suas associações de itens.
+
+        Raises:
+            ValueError: Quando já existir pedido com o mesmo id.
+        """
         with self._database.connect() as connection:
             existing = connection.execute(
                 "SELECT 1 FROM orders WHERE id = ?",
@@ -173,6 +189,11 @@ class SqliteOrderRepository(IOrder):
                 )
 
     def update_order(self, order: Order) -> None:
+        """Atualiza um pedido e recria o vínculo de itens.
+
+        Raises:
+            ValueError: Quando o pedido não existir.
+        """
         with self._database.connect() as connection:
             result = connection.execute(
                 """
@@ -207,6 +228,11 @@ class SqliteOrderRepository(IOrder):
             raise ValueError(f"Order not found: {order.id}")
 
     def delete_order(self, order_id: int) -> None:
+        """Remove um pedido e seus itens associados.
+
+        Raises:
+            ValueError: Quando o pedido não existir.
+        """
         with self._database.connect() as connection:
             connection.execute(
                 "DELETE FROM order_items WHERE order_id = ?",

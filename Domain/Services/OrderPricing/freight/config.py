@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 
 @dataclass(frozen=True)
 class FreightZoneConfig:
+    """Configuração de uma zona de frete (faixas de peso e valores)."""
     weight_tiers: tuple[float, ...]
     price_tiers: tuple[float, ...]
     express_surcharge: float
@@ -12,6 +13,7 @@ class FreightZoneConfig:
 
 @dataclass(frozen=True)
 class FreightConfig:
+    """Configuração completa de frete para cenários nacional e internacional."""
     default_country: str = "BR"
     domestic: FreightZoneConfig = field(
         default_factory=lambda: FreightZoneConfig(
