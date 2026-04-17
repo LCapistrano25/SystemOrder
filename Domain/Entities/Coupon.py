@@ -1,6 +1,7 @@
 import re
 from Domain.Entities.base.EntityBase import EntityBase
 class Coupon(EntityBase):
+    """Entidade de Cupom"""
     def __init__(self, id: int, code: str, discount: float):
         super().__init__(id)
         self.code = code.strip() if code else code
@@ -8,6 +9,7 @@ class Coupon(EntityBase):
         self._validate()
 
     def _validate(self):
+        """Regras de validação de cupom."""
         if not self.code or not re.match(r'^[A-Z0-9]+$', self.code):
             raise ValueError("Coupon code must contain only uppercase letters and numbers")
         
