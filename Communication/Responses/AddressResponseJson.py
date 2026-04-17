@@ -7,6 +7,7 @@ class AddressResponseJson:
     city: str
     state: str
     zip_code: str
+    country: str
 
     @classmethod
     def from_payload(cls, payload: dict) -> "AddressResponseJson":
@@ -15,6 +16,7 @@ class AddressResponseJson:
             city=payload["city"],
             state=payload["state"],
             zip_code=payload["zip_code"],
+            country=payload.get("country", "BR"),
         )
 
     def to_dict(self) -> dict:
@@ -23,4 +25,5 @@ class AddressResponseJson:
             "city": self.city,
             "state": self.state,
             "zip_code": self.zip_code,
+            "country": self.country,
         }

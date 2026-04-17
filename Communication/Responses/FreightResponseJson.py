@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from Communication.Responses.AddressResponseJson import AddressResponse
+from Communication.Responses.AddressResponseJson import AddressResponseJson
 
 
 
 @dataclass
 class FreightResponseJson:
     id: int
-    address: AddressResponse
+    address: AddressResponseJson
     total_weight: float
     price: float
     express_delivery: bool
@@ -15,7 +15,7 @@ class FreightResponseJson:
     def from_payload(cls, payload: dict) -> "FreightResponseJson":
         return cls(
             id=payload["id"],
-            address=AddressResponse.from_payload(payload["address"]),
+            address=AddressResponseJson.from_payload(payload["address"]),
             total_weight=payload["total_weight"],
             price=payload["price"],
             express_delivery=payload["express_delivery"],

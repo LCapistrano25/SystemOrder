@@ -5,6 +5,7 @@ class PaymentTypeJson(IntEnum):
     CARD = 1
     CASH = 2
     PIX = 3
+    BOLETO = 4
 
     @staticmethod
     def to_json(value: "PaymentTypeJson") -> str:

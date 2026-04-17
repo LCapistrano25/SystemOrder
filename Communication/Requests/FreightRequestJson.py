@@ -8,6 +8,7 @@ class FreightRequest:
     city: str
     state: str
     zip_code: str
+    country: str
     total_weight: float
     price: float
     express_delivery: bool
@@ -21,6 +22,7 @@ class FreightRequest:
             city=str(address["city"]),
             state=str(address["state"]),
             zip_code=str(address["zip_code"]),
+            country=str(address.get("country", "BR")),
             total_weight=float(body["total_weight"]),
             price=float(body["price"]),
             express_delivery=bool(body.get("express_delivery", False)),
@@ -34,6 +36,7 @@ class FreightRequest:
                 "city": self.city,
                 "state": self.state,
                 "zip_code": self.zip_code,
+                "country": self.country,
             },
             "total_weight": self.total_weight,
             "price": self.price,
