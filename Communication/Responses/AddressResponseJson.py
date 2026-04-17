@@ -1,29 +1,10 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
 
 
-@dataclass
-class AddressResponseJson:
-    street: str
-    city: str
-    state: str
-    zip_code: str
-    country: str
 
-    @classmethod
-    def from_payload(cls, payload: dict) -> "AddressResponseJson":
-        return cls(
-            street=payload["street"],
-            city=payload["city"],
-            state=payload["state"],
-            zip_code=payload["zip_code"],
-            country=payload.get("country", "BR"),
-        )
-
-    def to_dict(self) -> dict:
-        return {
-            "street": self.street,
-            "city": self.city,
-            "state": self.state,
-            "zip_code": self.zip_code,
-            "country": self.country,
-        }
+class AddressResponseJson(BaseModel):
+    street: str = Field(description="Rua")
+    city: str = Field(description="Cidade")
+    state: str = Field(description="Estado")
+    zip_code: str = Field(description="Código postal")
+    country: str = Field(description="País", default="BR")

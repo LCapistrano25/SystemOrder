@@ -1,15 +1,6 @@
-from dataclasses import dataclass
+from pydantic import BaseModel, Field
 
-
-@dataclass
-class CouponResponseJson:
-    id: int
-    code: str
-    discount: float
-
-    @classmethod
-    def from_payload(cls, payload: dict) -> "CouponResponseJson":
-        return cls(id=payload["id"], code=payload["code"], discount=payload["discount"])
-
-    def to_dict(self) -> dict:
-        return {"id": self.id, "code": self.code, "discount": self.discount}
+class CouponResponseJson(BaseModel):
+    id: int = Field(description="ID do cupom")
+    code: str = Field(description="Código do cupom")
+    discount: float = Field(description="Desconto em percentual")
