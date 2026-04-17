@@ -53,18 +53,14 @@ class Order(EntityBase):
             raise ValueError("Invalid coupon")
 
     def __str__(self):
+        coupon_code = self.coupon.code if self.coupon is not None else None
         return (
             f"Order(ID: {self.id}, "
             f"Customer(ID: {self.customer.id}, Name: {self.customer.name}, Email: {self.customer.email}, Blocked: {self.customer.blocked}), "
-            f"Items(ID: {self.items[0].id}, Name: {self.items[0].name}, Price: {self.items[0].price}, Quantity: {self.items[0].quantity}), "
-            f"Address(ID: {self.freight.address.id}, Street: {self.freight.address.street}, Number: {self.freight.address.number}, "
-            f"Complement: {self.freight.address.complement}, "
-            f"District: {self.freight.address.district}, "
-            f"City: {self.freight.address.city}, "
-            f"State: {self.freight.address.state}, "
-            f"Zip Code: {self.freight.address.zip_code}, "
+            f"Items: {len(self.items)}, "
+            f"Address: {self.freight.address}, "
             f"Total Weight: {self.freight.total_weight}, "
-            f"Payment(ID: {self.payment.id}, Payment Type: {self.payment.payment_type.name}, Installments: {self.payment.installments})"
-            f"Coupon(ID: {self.coupon.id}, Coupon Code: {self.coupon.coupon_code}, Discount: {self.coupon.discount}, "
+            f"Payment(ID: {self.payment.id}, Type: {self.payment.payment_type.name}, Installments: {self.payment.installments}), "
+            f"Coupon: {coupon_code}, "
             f"Express Delivery: {self.freight.express_delivery})"
         )

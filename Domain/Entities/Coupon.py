@@ -11,8 +11,8 @@ class Coupon(EntityBase):
         if not self.code or not re.match(r'^[A-Z0-9]+$', self.code):
             raise ValueError("Coupon code must contain only uppercase letters and numbers")
         
-        if self.discount <= 0 or self.discount > 100:
-            raise ValueError("Discount must be between 1 and 100")
+        if self.discount < 0:
+            raise ValueError("Discount cannot be negative")
 
     def __str__(self):
         return f"Coupon(ID: {self.id}, Code: {self.code}, Discount: {self.discount}%)"

@@ -15,8 +15,8 @@ class Freight(EntityBase):
             raise ValueError("Invalid address")
         if self.total_weight <= 0:
             raise ValueError("Weight must be greater than zero")
-        if self.price <= 0:
-            raise ValueError("Price must be greater than zero")
+        if self.price < 0:
+            raise ValueError("Price cannot be negative")
         if not isinstance(self.express_delivery, bool):
             raise ValueError("Express delivery must be a boolean value")
 

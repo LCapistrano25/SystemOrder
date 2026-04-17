@@ -13,10 +13,10 @@ class Item(EntityBase):
     def _validate(self):
         if not self.name:
             raise ValueError("Name cannot be empty")
-        if self.price <= 0:
-            raise ValueError("Price must be greater than zero")
-        if self.quantity < 0:
-            raise ValueError("Quantity cannot be negative")
+        if self.price < 0:
+            raise ValueError("Price cannot be negative")
+        if self.quantity <= 0:
+            raise ValueError("Quantity must be greater than zero")
         
         if not isinstance(self.category, Category):
             raise ValueError("Invalid category")

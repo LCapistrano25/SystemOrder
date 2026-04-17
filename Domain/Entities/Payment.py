@@ -11,9 +11,12 @@ class Payment(EntityBase):
     def _validate(self):
         if not isinstance(self.payment_type, PaymentType):
             raise ValueError("Invalid payment type")
-        
-        if self.installments <= 0:
-            raise ValueError("Installments must be greater than zero")
+        if self.payment_type == PaymentType.CARD:
+            if self.installments <= 0:
+                raise ValueError("Installments must be greater than zero")
+        else:
+            if self.installments != 1:
+                raise ValueError("Installments must be 1 for non-card payments")
 
     def __str__(self):
         return f"Payment(ID: {self.id}, Payment Type: {self.payment_type.name}, Installments: {self.installments})"
